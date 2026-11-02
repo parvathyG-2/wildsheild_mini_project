@@ -17,18 +17,18 @@ start "" cmd /c "timeout /t 2 /nobreak >nul & start http://127.0.0.1:8000"
 :: Start the Python server with fallback checks
 python --version >nul 2>&1
 if %ERRORLEVEL% equ 0 (
-    python main.py
+    python backend\main.py
     goto server_stopped
 )
 
 py --version >nul 2>&1
 if %ERRORLEVEL% equ 0 (
-    py -3 main.py
+    py -3 backend\main.py
     goto server_stopped
 )
 
 if exist "C:\Program Files\Python314\python.exe" (
-    "C:\Program Files\Python314\python.exe" main.py
+    "C:\Program Files\Python314\python.exe" backend\main.py
     goto server_stopped
 )
 

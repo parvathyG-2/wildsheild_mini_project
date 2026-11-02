@@ -12,7 +12,6 @@ echo ===================================================================
 echo.
 
 set SERVER_SCRIPT=backend\main.py
-if not exist "%SERVER_SCRIPT%" set SERVER_SCRIPT=main.py
 
 set SIM_SCRIPT=backend\tests\test_node_simulator.py
 if not exist "%SIM_SCRIPT%" set SIM_SCRIPT=test_node_simulator.py

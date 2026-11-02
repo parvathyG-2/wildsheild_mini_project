@@ -126,7 +126,7 @@ Double-click **`run_full_system_demo.bat`**. This single file will automatically
 ---
 
 ### Option 2: Live Server Mode
-1. Double-click **`run_dashboard.bat`** (or run `python main.py` in PowerShell/CMD).
+1. Double-click **`run_dashboard.bat`** (or run `python backend/main.py` in PowerShell/CMD).
 2. Keep the command prompt window **OPEN** while using the system.
 3. Your web browser will automatically open to:
    - Host machine: **`http://127.0.0.1:8000`**
@@ -205,7 +205,7 @@ void sendTelemetry(const char* jsonPayload) {
 ## ❓ Frequently Asked Questions & Troubleshooting
 
 ### Why does my browser show `127.0.0.1 refused to connect`?
-This happens when you open your browser to `http://127.0.0.1:8000` while the Python backend server (`python main.py`) is not running.
+This happens when you open your browser to `http://127.0.0.1:8000` while the Python backend server (`python backend/main.py`) is not running.
 - **Solution A (No Python / 100% Offline):** Double-click **`open_browser_offline.bat`** (or open `index.html` directly in Edge/Chrome).
 - **Solution B (Full Live Backend):** Double-click **`run_full_system_demo.bat`**. Keep the command window open while using the dashboard.
 
@@ -253,7 +253,7 @@ run_full_system_demo.bat
 ```
 Or start the server manually:
 ```cmd
-python main.py
+python backend/main.py
 ```
 Open **`http://127.0.0.1:8000`** in your browser.
 
