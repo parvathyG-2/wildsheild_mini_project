@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WILDSHIELD // Forest Highway Wildlife Telemetry</title>
+  
+  <!-- Modern Clean Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <!-- Externalized Modular Stylesheet (Light Forest Daylight Palette) -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- =========================================================
+       HEADER: BRAND, VOICE SHORTCUT & TRI-LINGUAL LOCALIZATION
+       ========================================================= -->
+    <!-- =========================================================
+       GATEWAY: STANDARD MODERN LOGIN & SIGN-UP SCREEN (INSTAGRAM / NORMAL APP MODEL)
+       Displayed FIRST: Users must authenticate here before entering main session!
+       ========================================================= -->
+  <div id="auth-gateway-view" class="auth-gateway-screen">
+    <div class="auth-card-container">
+      <!-- Main Brand Card -->
+      <div class="auth-card">
+        <div class="auth-brand-head">
+          <div class="auth-app-logo">🌿</div>
+          <h1 class="auth-app-title">WILDSHIELD</h1>
+          <p class="auth-app-subtitle">Forest Highway Wildlife Telemetry & Road Safety</p>
+        </div>
+
+        <!-- FORM 1: SIGN IN VIEW (DEFAULT) -->
+        <div id="gateway-signin-panel">
+          <form id="gateway-signin-form" class="auth-form" autocomplete="off">
+            <div class="auth-input-group">
+              <input type="text" id="auth-login-email" class="auth-input" placeholder="Email address" value="" required autocomplete="off" />
+            </div>
+
+            <div class="auth-input-group">
+              <input type="password" id="auth-login-password" class="auth-input" placeholder="Password" value="" required autocomplete="new-password" />
+            </div>
+
+            <div id="auth-signin-error" class="auth-error-msg" style="display: none;"></div>
+
+            <button type="submit" id="btn-auth-login-submit" class="auth-btn-primary">
+              Log In
+            </button>
+          </form>
+
+          <div class="auth-divider">
+            <span class="auth-divider-line"></span>
+            <span class="auth-divider-text">OR</span>
+            <span class="auth-divider-line"></span>
+          </div>
+
+          <!-- Continue with Google SSO -->
+          <button type="button" id="btn-gateway-google-login" class="auth-btn-google" onclick="openGoogleAccountModal()">
+            <svg class="google-svg" viewBox="0 0 48 48" width="18" height="18">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+            <span>Log in with Google</span>
+          </button>
+
+          </div>
+
+        <!-- FORM 2: SIGN UP VIEW (TOGGLED) -->
+        <div id="gateway-signup-panel" style="display: none;">
+          <form id="gateway-signup-form" class="auth-form">
+            <div class="auth-input-group">
+              <input type="text" id="auth-reg-name" class="auth-input" placeholder="Full Name" required />
+            </div>
+
+            <div class="auth-input-group">
+              <input type="email" id="auth-reg-email" class="auth-input" placeholder="Email address" required />
+            </div>
+
+            <div class="auth-input-group">
+              <input type="password" id="auth-reg-password" class="auth-input" placeholder="Password (min 6 characters)" required />
+            </div>
+
+            <div id="auth-signup-error" class="auth-error-msg" style="display: none;"></div>
+
+            <button type="submit" id="btn-auth-signup-submit" class="auth-btn-primary">
+              Sign Up as Traveler
+            </button>
+          </form>
+
+          <p class="auth-terms-note">
+            By signing up, you agree to forest wildlife safety protocols and corridor speed vigilance.
+          </p>
+        </div>
+      </div>
+
+      <!-- Secondary Switcher Card (Instagram Style) -->
+      <div class="auth-switch-card">
+        <div id="switch-to-signup-msg">
+          Don't have an account? <button type="button" class="auth-link-btn" onclick="toggleAuthMode('signup')">Sign up</button>
+        </div>
+        <div id="switch-to-signin-msg" style="display: none;">
+          Have an account? <button type="button" class="auth-link-btn" onclick="toggleAuthMode('signin')">Log in</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MAIN APPLICATION SESSION (Visible ONLY after entering session!)
+       ========================================================= -->
+    <!-- =========================================================
+       GMAIL ACCOUNT SELECTION MODAL (GOOGLE ACCOUNT CHOOSER)
+       ========================================================= -->
+  <div id="google-account-modal" class="google-account-modal" role="dialog" aria-modal="true">
+    <div class="google-account-card">
+      <button type="button" class="google-modal-close" onclick="closeGoogleAccountModal()" aria-label="Close">✕</button>
+      
+      <!-- Google Logo & Title -->
+      <div style="margin-bottom: 1.25rem;">
+        <svg viewBox="0 0 48 48" width="36" height="36" style="margin-bottom: 0.5rem;">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        <h2 style="font-size: 1.35rem; font-weight: 700; color: #1e293b; margin: 0 0 0.25rem;">Choose a Google Account</h2>
+        <p style="font-size: 0.84rem; color: #64748b; margin: 0;">to continue to <strong>WildShield Telemetry</strong></p>
+      </div>
+
+      <!-- Account Selection List -->
+      <div class="google-account-list">
+        <!-- Account 1: Admin -->
+        <div class="google-account-item" onclick="selectGoogleAccount('parvathyg260@gmail.com', 'Parvathy G (Chief Administrator)', 'ADMIN')">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="Admin" class="google-item-avatar" />
+          <div class="google-item-info">
+            <div class="google-item-name">Parvathy G (Admin)</div>
+            <div class="google-item-email">parvathyg260@gmail.com</div>
+          </div>
+          <span class="google-item-badge admin">ADMIN</span>
+        </div>
+
+        <!-- Account 2: Forest Officer -->
+        <div class="google-account-item" onclick="selectGoogleAccount('officer.wildshield@gmail.com', 'Forest Patrol Officer', 'OFFICER')">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=80&q=80" alt="Officer" class="google-item-avatar" />
+          <div class="google-item-info">
+            <div class="google-item-name">Wayanad Forest Patrol Officer</div>
+            <div class="google-item-email">officer.wildshield@gmail.com</div>
+          </div>
+          <span class="google-item-badge officer">OFFICER</span>
+        </div>
+
+        <!-- Account 3: Traveler -->
+        <div class="google-account-item" onclick="selectGoogleAccount('traveler.wildshield@gmail.com', 'Traveler Suresh', 'USER')">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80" alt="Traveler" class="google-item-avatar" />
+          <div class="google-item-info">
+            <div class="google-item-name">Traveler Suresh</div>
+            <div class="google-item-email">traveler.wildshield@gmail.com</div>
+          </div>
+          <span class="google-item-badge user">TRAVELER</span>
+        </div>
+      </div>
+
+      <!-- Option 4: Use Another Gmail Account -->
+      <div class="google-custom-box">
+        <button type="button" id="btn-toggle-custom-gmail" onclick="toggleCustomGmailBox()" style="background: none; border: none; font-size: 0.85rem; font-weight: 700; color: #059669; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0;">
+          <span>➕</span> <span>Use another Gmail account...</span>
+        </button>
+
+        <form id="custom-gmail-form" style="display: none; margin-top: 0.75rem;" onsubmit="handleCustomGmailSubmit(event)">
+          <div style="margin-bottom: 0.6rem;">
+            <input type="email" id="custom-gmail-email" placeholder="yourname@gmail.com" required style="width: 100%; padding: 0.65rem 0.8rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem;" />
+          </div>
+          <div style="margin-bottom: 0.75rem;">
+            <input type="text" id="custom-gmail-name" placeholder="Your Name (Optional)" style="width: 100%; padding: 0.65rem 0.8rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem;" />
+          </div>
+          <button type="submit" style="width: 100%; background: #059669; color: #ffffff; border: none; border-radius: 6px; padding: 0.65rem; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+            Sign In with this Gmail
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="main-application-session" style="display: none;">
+<header>
+    <div class="brand-wrap">
+      <span class="brand-icon">🌿</span>
+      <div class="brand-title">
+        <h1 id="ui-brand-title">WILDSHIELD TELEMETRY</h1>
+        <p id="ui-brand-sub">VEHICLE EDGE WILDLIFE RADAR</p>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <!-- Quick Voice Supporter Pill -->
+      <button type="button" id="btn-quick-voice" class="btn-header-voice" aria-label="Toggle Voice Assistant">
+        <span>🎙️</span>
+        <span id="ui-quick-voice-label">Voice Assistant</span>
+      </button>
+
+      <!-- Tri-Lingual Language Dropdown -->
+      <select id="lang-switcher" class="lang-select" aria-label="Language Selector">
+        <option value="en">English (EN)</option>
+        <option value="ml">മലയാളം (ML)</option>
+        <option value="hi">हिन्दी (HI)</option>
+      </select>
+
+      <!-- Google / Admin Authentication Interface Trigger -->
+      <div id="auth-header-container" class="auth-header-container">
+        <!-- Logged Out View -->
+        <button type="button" id="btn-open-login-modal" class="btn-header-login">
+          <svg class="google-svg" viewBox="0 0 48 48" width="16" height="16" style="vertical-align: middle;">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          <span id="ui-btn-login-text">Sign In with Google</span>
+        </button>
+
+        <!-- Logged In Admin View -->
+        <div id="user-profile-widget" class="user-profile-widget" style="display: none;">
+          <div class="user-avatar-badge-wrap">
+            <img id="header-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="Avatar" class="header-user-avatar" />
+            <span class="user-online-pip"></span>
+          </div>
+          <div class="user-meta-info">
+            <span id="header-user-name" class="user-display-name">Chief Administrator</span>
+            <span id="header-user-role" class="user-role-badge">ADMIN</span>
+          </div>
+          <button type="button" id="btn-header-admin-jump" class="btn-admin-shortcut" title="Open Admin Data Console">
+            <span>⚡</span>
+            <span>Console</span>
+          </button>
+          <button type="button" id="btn-header-logout" class="btn-header-logout" title="Sign Out">
+            <span>🚪</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       IN-APP VEHICLE WI-FI HOTSPOT & NETWORK HEALTH STATUS
+       ========================================================= -->
+  <div class="hotspot-status-bar">
+    <div class="status-indicator-group">
+      <div id="hotspot-led" class="pulse-dot"></div>
+      <span id="ui-hotspot-status"><strong>● Hotspot Connected</strong> (ESP32 Vehicle Node Active)</span>
+    </div>
+    <div class="hotspot-meta">
+      <span>SSID: <strong id="hotspot-ssid">WildShield_Hotspot</strong></span>
+      <span>Subnet: <strong id="hotspot-ip">192.168.43.100:8000</strong></span>
+      <span>Last Ping: <strong id="hotspot-ping">Just now</strong></span>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MAIN CONTENT CONTAINER
+       ========================================================= -->
+  <main class="main-wrap">
+
+    <!-- =======================================================
+         VOICE SUPPORTER & HANDS-FREE SAFETY ASSISTANT
+         ======================================================= -->
+    <section class="card voice-card">
+      <div class="card-header-line">
+        <div class="card-title">
+          <span>🎙️</span>
+          <span id="ui-voice-title">Hands-Free Voice Supporter & Emergency Assistant</span>
+        </div>
+        <span style="font-size: 0.74rem; font-family: var(--font-mono); color: var(--accent-emerald-dark); font-weight: 800;">
+          SMART CABIN RADAR
+        </span>
+      </div>
+
+      <div class="voice-body">
+        <div class="voice-status-line">
+          <div class="voice-badge-group">
+            <span id="voice-state-badge" class="voice-state-pill">
+              <span id="voice-led" class="pulse-dot"></span>
+              <span id="ui-voice-status">Voice Supporter Ready (Tap to Speak)</span>
+            </span>
+
+            <div id="voice-wave-bars" class="wave-bars">
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+            </div>
+          </div>
+
+          <div class="voice-command-hints">
+            <span id="ui-voice-hint-label">Say or Click:</span>
+            <button type="button" class="voice-chip emergency" onclick="simulateVoicePhrase('Emergency Call')" title="Click to test emergency call sequence">🚨 "Emergency Call"</button>
+            <button type="button" class="voice-chip" onclick="simulateVoicePhrase('Open Map')" title="Click to open driving directions">🗺️ "Open Map"</button>
+            <button type="button" class="voice-chip" onclick="simulateVoicePhrase('Route Status')" title="Click to hear audible corridor status">📢 "Route Status"</button>
+            <button type="button" class="voice-chip" onclick="simulateVoicePhrase('മലയാളം')" title="Switch voice & UI to Malayalam">🌴 "മലയാളം"</button>
+            <button type="button" class="voice-chip" onclick="simulateVoicePhrase('हिन्दी')" title="Switch voice & UI to Hindi">🇮🇳 "हिन्दी"</button>
+            <button type="button" class="voice-chip" onclick="simulateVoicePhrase('English')" title="Switch voice & UI to English">🇬🇧 "English"</button>
+          </div>
+        </div>
+
+        <!-- Live transcript box -->
+        <div id="voice-live-transcript-box" class="voice-transcript-box" style="display: none;">
+          <span>🗣️</span>
+          <span id="ui-transcript-prefix">Heard:</span>
+          <strong id="voice-live-transcript">""</strong>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="voice-btn-row">
+          <button type="button" id="btn-voice-toggle" class="btn-voice-toggle" onclick="toggleVoiceSession()">
+            <span>🎙️</span>
+            <span id="ui-btn-voice-toggle">Start Voice Supporter (Mic)</span>
+          </button>
+
+          <button type="button" id="btn-test-voice-emergency" class="btn-voice-test" onclick="testEmergencyCall()">
+            <span>🚨</span>
+            <span id="ui-btn-voice-test">Test "Emergency Call" Trigger</span>
+          </button>
+        </div>
+
+        <!-- Interactive Hands-Free Voice Command Input -->
+        <div style="margin-top: 0.85rem; display: flex; gap: 0.5rem; align-items: center; background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.45rem 0.75rem;">
+          <span style="font-size: 1.1rem;">🗣️</span>
+          <input type="text" id="voice-sim-input" placeholder="Type or click any voice command above (e.g. 'emergency call', 'open map', 'route status')..." style="flex: 1; border: none; background: transparent; outline: none; font-size: 0.86rem; color: var(--text-main);" />
+          <button type="button" id="btn-voice-sim-send" onclick="sendVoiceSimInput()" style="background: var(--accent-emerald); color: #ffffff; border: none; padding: 0.45rem 0.95rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+            Speak / Execute ↵
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         MODULE A: TRAVELER PORTAL (PUBLIC DEFAULT)
+         ======================================================= -->
+    <section class="card">
+      <div class="card-header-line">
+        <div class="card-title">
+          <span>🚗</span>
+          <span id="ui-route-safety-title">Highway Transit Corridor Route Safety</span>
+        </div>
+        <span style="font-size: 0.74rem; font-family: var(--font-mono); color: var(--accent-emerald-dark); font-weight: 800;">
+          LIVE TELEMETRY STREAM
+        </span>
+      </div>
+
+      <!-- Corridor Route Selector Dropdown -->
+      <div class="route-selector-box">
+        <label for="route-select" class="input-label" id="ui-select-route-label">
+          Select Forest Transit Highway:
+        </label>
+        <select id="route-select" class="route-dropdown">
+          <option value="nh766">Wayanad NH-766 (Bandipur — Sultan Bathery Corridor)</option>
+          <option value="sh17">Chinnar SH-17 (Marayoor — Udumalpet Ghat Road)</option>
+          <option value="nh85">Munnar Gap Road NH-85 (Kochi — Dhanushkodi Pass)</option>
+        </select>
+      </div>
+
+      <!-- Dynamic Road Status Banner (Tied to Edge Telemetry) -->
+      <div id="road-status-banner" class="status-banner blocked">
+        <div class="banner-head">
+          <span id="status-icon">🚨</span>
+          <span id="ui-status-head">BLOCKED / CRITICAL — Active Wildlife Roadblock Detected</span>
+        </div>
+        <div id="ui-status-desc" class="banner-desc">
+          Elephant herd currently crossing roadway near KM 43. Road passage temporarily obstructed.
+        </div>
+        <div>
+          <span id="ui-speed-tip" class="banner-speed-tip">
+            ⚠️ MANDATORY PROTOCOL: REDUCE SPEED TO 30 KM/H • LOW BEAMS ONLY • STRICTLY DO NOT HONK
+          </span>
+        </div>
+      </div>
+
+      <!-- Single Clean Google Maps Route Button (Direct driving directions from Start to Destination) -->
+      <div class="maps-actions-row" style="grid-template-columns: 1fr;">
+        <a id="btn-open-maps" href="https://www.google.com/maps/dir/?api=1&origin=11.6660,76.6340&destination=11.6645,76.2570&travelmode=driving" target="_blank" rel="noopener noreferrer" class="btn-maps" style="width: 100%; text-align: center; justify-content: center; font-size: 1.05rem; padding: 1rem 1.6rem; border-radius: 10px;">
+          <span>🗺️</span>
+          <span id="ui-btn-maps-text">Open Route in Google Maps (Driving Directions) ↗️</span>
+        </a>
+      </div>
+
+      <!-- Working Live Highway Map (Click anywhere to open route in Google Maps) -->
+      <div class="route-radar-box" style="border: 2px solid var(--accent-emerald); margin-top: 0.85rem; position: relative;">
+        <div class="route-radar-header" style="background: var(--accent-emerald-dark); color: #ffffff;">
+          <span style="display:flex; align-items:center; gap:0.5rem;">
+            <span>🗺️</span>
+            <span id="ui-inpage-gmaps-title">HIGHWAY ROUTE MAP (CLICK TO OPEN GOOGLE MAPS)</span>
+          </span>
+          <a id="btn-map-direct-top" href="https://www.google.com/maps/dir/?api=1&origin=11.6660,76.6340&destination=11.6645,76.2570&travelmode=driving" target="_blank" rel="noopener noreferrer" style="background: rgba(255,255,255,0.25); color: #ffffff; padding: 4px 12px; border-radius: 4px; font-size: 0.78rem; font-weight: bold; text-decoration: none;">
+            Open Google Maps ↗️
+          </a>
+        </div>
+        <div style="width: 100%; height: 320px; background: #e2e8f0; position: relative;">
+          <!-- 100% Working OpenStreetMap Highway Route Overview -->
+          <iframe id="inpage-gmaps-iframe" style="width: 100%; height: 100%; border: none;" src="https://www.openstreetmap.org/export/embed.html?bbox=76.22,11.60,76.66,11.72&layer=mapnik" allowfullscreen loading="lazy"></iframe>
+          <!-- Floating Action Button on Map -->
+          <a id="btn-map-direct-overlay" href="https://www.google.com/maps/dir/?api=1&origin=11.6660,76.6340&destination=11.6645,76.2570&travelmode=driving" target="_blank" rel="noopener noreferrer" style="position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); background: #059669; color: #ffffff; padding: 10px 22px; border-radius: 30px; font-weight: 800; font-size: 0.88rem; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px; z-index: 10;">
+            <span>🚗</span>
+            <span>Open Highway Route in Google Maps ↗️</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Toast Feedback Popup Banner for Google Maps -->
+      <div id="ui-maps-toast" class="maps-toast-banner">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:0.5rem; font-weight:800; color:#065f46;">
+            <span style="font-size:1.2rem;">✅</span>
+            <span id="ui-toast-title">Google Maps Opened in Interactive Box & Copied!</span>
+          </div>
+          <button id="ui-btn-close-toast" style="background:#e2e8f0; border:none; border-radius:4px; padding:2px 8px; cursor:pointer; font-weight:bold;">✕</button>
+        </div>
+        <div id="ui-toast-url" style="font-family:monospace; font-size:0.78rem; background:#ffffff; border:1px solid #a7f3d0; padding:6px 10px; border-radius:6px; word-break:break-all; user-select:all; color:#1e293b; font-weight:600;">
+          https://www.google.com/maps/dir/?api=1&origin=11.6660,76.6340&destination=11.6645,76.2570&travelmode=driving
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:#475569;">
+          <span>💡 Interactive box opened above. Press <kbd style="background:#e2e8f0; padding:2px 5px; border-radius:4px; font-weight:bold;">Ctrl+V</kbd> to paste elsewhere.</span>
+          <button id="ui-toast-link" type="button" style="background:#059669; color:#ffffff; padding:4px 10px; border-radius:6px; border:none; font-weight:bold; cursor:pointer;">
+            Enlarge Map Box ⛶
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Interactive Route Radar SVG Map (Embedded In-Page) -->
+      <div class="route-radar-box">
+        <div class="route-radar-header">
+          <span style="display:flex; align-items:center; gap:0.5rem;">
+            <span style="width:8px; height:8px; border-radius:50%; background:#059669; display:inline-block;"></span>
+            <span id="ui-svg-corridor-title">HIGHWAY CORRIDOR RADAR: WAYANAD NH-766</span>
+          </span>
+          <span id="ui-svg-status-pill" style="background:#fee2e2; color:#dc2626; border:1px solid #f87171; padding:2px 8px; border-radius:4px; font-weight:900;">
+            ROADBLOCK AT KM 43
+          </span>
+        </div>
+
+        <div class="route-radar-body">
+          <svg id="main-route-svg" viewBox="0 0 760 180" style="width:100%; height:auto;" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="760" height="180" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" />
+            <path d="M 0,40 Q 180,10 380,45 T 760,35 L 760,0 L 0,0 Z" fill="#ecfdf5" opacity="0.6" />
+            <path d="M 0,180 Q 200,150 420,165 T 760,150 L 760,180 L 0,180 Z" fill="#ecfdf5" opacity="0.6" />
+            
+            <g fill="#10b981" opacity="0.25">
+              <polygon points="50,25 58,40 42,40" />
+              <polygon points="120,20 128,35 112,35" />
+              <polygon points="210,28 218,43 202,43" />
+              <polygon points="480,22 488,37 472,37" />
+              <polygon points="620,25 628,40 612,40" />
+              <polygon points="90,155 98,170 82,170" />
+              <polygon points="300,150 308,165 292,165" />
+              <polygon points="550,152 558,167 542,167" />
+              <polygon points="680,150 688,165 672,165" />
+            </g>
+
+            <path d="M 60,95 C 220,40 320,150 500,90 S 660,110 700,95" fill="none" stroke="#475569" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M 60,95 C 220,40 320,150 500,90 S 660,110 700,95" fill="none" stroke="#334155" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M 60,95 C 220,40 320,150 500,90 S 660,110 700,95" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="12,12" stroke-linecap="round" />
+
+            <!-- Pulsing Hazard Marker -->
+            <g id="ui-svg-hazard-group" transform="translate(390, 115)">
+              <circle class="svg-radar-pulse" cx="0" cy="0" r="16" fill="none" stroke="#dc2626" stroke-width="3" />
+              <circle class="svg-radar-pulse" cx="0" cy="0" r="28" fill="none" stroke="#ef4444" stroke-width="2" style="animation-delay: 0.7s;" />
+              <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#ffffff" stroke-width="2.5" />
+              <text x="0" y="5" text-anchor="middle" font-size="12" fill="#ffffff">🚨</text>
+              
+              <g transform="translate(0, -28)">
+                <rect x="-95" y="-22" width="190" height="24" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5" />
+                <polygon points="-5,2 0,7 5,2" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5" />
+                <rect x="-4" y="0" width="8" height="3" fill="#fef2f2" />
+                <text id="ui-svg-hazard-tag" x="0" y="-6" text-anchor="middle" font-size="10" font-weight="900" fill="#991b1b" font-family="system-ui">
+                  🐘 KM 43: ELEPHANT ROADBLOCK
+                </text>
+              </g>
+            </g>
+
+            <!-- Origin Checkpost Pin -->
+            <g transform="translate(60, 95)">
+              <circle cx="0" cy="0" r="10" fill="#059669" stroke="#ffffff" stroke-width="2.5" />
+              <text x="0" y="4" text-anchor="middle" font-size="10" fill="#ffffff">🏁</text>
+              <g transform="translate(0, -18)">
+                <rect x="-55" y="-18" width="110" height="20" rx="4" fill="#ecfdf5" stroke="#059669" stroke-width="1.5" />
+                <text id="ui-svg-origin-name" x="0" y="-4" text-anchor="middle" font-size="9" font-weight="800" fill="#065f46" font-family="system-ui">
+                  Bandipur Checkpost
+                </text>
+              </g>
+              <text x="0" y="24" text-anchor="middle" font-size="9" font-weight="700" fill="#475569" font-family="monospace">KM 0.0</text>
+            </g>
+
+            <!-- Destination Pin -->
+            <g transform="translate(700, 95)">
+              <circle cx="0" cy="0" r="10" fill="#0f172a" stroke="#ffffff" stroke-width="2.5" />
+              <text x="0" y="4" text-anchor="middle" font-size="10" fill="#ffffff">🏁</text>
+              <g transform="translate(0, -18)">
+                <rect x="-60" y="-18" width="120" height="20" rx="4" fill="#f1f5f9" stroke="#475569" stroke-width="1.5" />
+                <text id="ui-svg-dest-name" x="0" y="-4" text-anchor="middle" font-size="9" font-weight="800" fill="#0f172a" font-family="system-ui">
+                  Sultan Bathery
+                </text>
+              </g>
+              <text id="ui-svg-dest-km" x="0" y="24" text-anchor="middle" font-size="9" font-weight="700" fill="#475569" font-family="monospace">KM 38.0</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="route-radar-foot">
+          <div>
+            <strong>GPS Corridor:</strong>
+            <span id="ui-svg-gps-coords" style="font-family:monospace; font-weight:bold; color:#065f46; background:#ecfdf5; padding:2px 6px; border-radius:4px; margin-left:4px;">11.6660, 76.6340 → 11.6645, 76.2570</span>
+          </div>
+          <div>
+            <strong>Speed Protocol:</strong>
+            <span id="ui-svg-speed-protocol" style="font-family:monospace; font-weight:bold; color:#dc2626; background:#fef2f2; padding:2px 6px; border-radius:4px; margin-left:4px;">30 KM/H LIMIT</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Corridor Checkpoint Strip Preview -->
+      <div class="corridor-route-strip">
+        <div class="route-checkpoint origin">
+          <span class="checkpoint-icon">🏁</span>
+          <div class="checkpoint-info">
+            <span class="checkpoint-label">START / CHECKPOST</span>
+            <span id="ui-checkpoint-origin" class="checkpoint-name">Bandipur Forest Checkpost</span>
+          </div>
+        </div>
+        <div class="route-line-connector">
+          <div class="route-hazard-marker" id="route-hazard-badge">
+            <span id="route-hazard-icon">🚨</span>
+            <span id="ui-route-hazard-text">KM 42-46 (ELEPHANT CORRIDOR)</span>
+          </div>
+        </div>
+        <div class="route-checkpoint destination">
+          <span class="checkpoint-icon">🏁</span>
+          <div class="checkpoint-info">
+            <span class="checkpoint-label">DESTINATION</span>
+            <span id="ui-checkpoint-dest" class="checkpoint-name">Sultan Bathery, Wayanad</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FREQUENTLY ANIMAL PASSING CORRIDORS (HOTSPOT DESCRIPTIONS) -->
+    <section class="card">
+      <div class="card-header-line">
+        <div class="card-title">
+          <span>🐾</span>
+          <span id="ui-corridors-title">High-Frequency Wildlife Crossing Hotspots</span>
+        </div>
+      </div>
+
+      <div class="corridors-grid">
+        <!-- Hotspot Card 1 -->
+        <div class="corridor-card elephant">
+          <div class="corridor-title">
+            <span>🐘</span>
+            <span id="ui-corridor1-title">Elephant Corridor (KM 42–46)</span>
+          </div>
+          <p id="ui-corridor1-desc" class="corridor-desc">
+            Primary migration route connecting seasonal watering basins. Peak movements during dawn (05:00-08:00) and dusk (17:30-21:00). High beams provoke herd aggression; drive with low beams only.
+          </p>
+        </div>
+
+        <!-- Hotspot Card 2 -->
+        <div class="corridor-card river">
+          <div class="corridor-title">
+            <span>🦌</span>
+            <span id="ui-corridor2-title">River Valley Bend (KM 38–41)</span>
+          </div>
+          <p id="ui-corridor2-desc" class="corridor-desc">
+            Blind curve where spotted deer and wild boars graze along roadside banks. Sharp curves drastically reduce braking distance. Maintain strict 30 km/h speed limit.
+          </p>
+        </div>
+
+        <!-- Hotspot Card 3 -->
+        <div class="corridor-card buffer">
+          <div class="corridor-title">
+            <span>🐅</span>
+            <span id="ui-corridor3-title">Buffer Crossing Zone (KM 50–54)</span>
+          </div>
+          <p id="ui-corridor3-desc" class="corridor-desc">
+            Monitored nocturnal predator transit corridor (tiger and leopard crossings). Continuous Forest Department sensor watch. Never disembark or pull over on highway shoulders.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMERGENCY FOREST HELPLINES (CLICK-TO-DIAL) -->
+    <section class="card">
+      <div class="card-header-line">
+        <div class="card-title">
+          <span>📞</span>
+          <span id="ui-helpline-title">24/7 Forest Emergency Helplines (One-Tap Dial)</span>
+        </div>
+      </div>
+
+      <div class="helplines-grid">
+        <button type="button" class="helpline-link" onclick="handleOneTapDial('1926', 'State Forest Emergency Toll-Free', '🚨')" title="Click to dial 1926 or copy number">
+          <span class="helpline-icon">🚨</span>
+          <div class="helpline-info">
+            <div class="name" id="ui-hl-tollfree">State Forest Emergency Toll-Free</div>
+            <div class="tel">1926</div>
+          </div>
+          <span class="helpline-action-tag">📞 Tap to Dial</span>
+        </button>
+
+        <button type="button" class="helpline-link" onclick="handleOneTapDial('+91 94479 79000', 'Wildlife Rapid Response Squad (RRT)', '🛡️')" title="Click to dial +91 94479 79000 or copy number">
+          <span class="helpline-icon">🛡️</span>
+          <div class="helpline-info">
+            <div class="name" id="ui-hl-rrt">Wildlife Rapid Response Squad (RRT)</div>
+            <div class="tel">+91 94479 79000</div>
+          </div>
+          <span class="helpline-action-tag">📞 Tap to Dial</span>
+        </button>
+
+        <button type="button" class="helpline-link" onclick="handleOneTapDial('112', 'National Highway Emergency (Police/Medical)', '🚔')" title="Click to dial 112 or copy number">
+          <span class="helpline-icon">🚔</span>
+          <div class="helpline-info">
+            <div class="name" id="ui-hl-checkpost">National Highway Emergency (Police/Medical)</div>
+            <div class="tel">112</div>
+          </div>
+          <span class="helpline-action-tag">📞 Tap to Dial</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ONE-TAP EMERGENCY DIAL INTERACTIVE MODAL -->
+    <div id="one-tap-dial-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-box" style="max-width: 440px; text-align: center; border-top: 5px solid var(--accent-emerald);">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;" id="one-tap-dial-icon">📞</div>
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem;" id="one-tap-dial-title">
+          Emergency Helpline Dispatch
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;" id="one-tap-dial-sub">
+          Connecting your device to forest emergency helpline.
+        </p>
+
+        <div style="background: #f0fdf4; border: 2px dashed #86efac; border-radius: 10px; padding: 1rem; margin-bottom: 1.2rem;">
+          <div style="font-size: 0.76rem; font-weight: 800; color: var(--accent-emerald-dark); letter-spacing: 0.5px; margin-bottom: 0.25rem;">
+            TARGET DIAL NUMBER
+          </div>
+          <div id="one-tap-dial-number" style="font-size: 2rem; font-weight: 900; color: #112217; font-family: monospace;">
+            1926
+          </div>
+          <div id="one-tap-dial-copy-badge" style="display: inline-block; font-size: 0.72rem; background: #dcfce7; color: #15803d; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 0.35rem;">
+            ✅ Copied to Clipboard
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+          <a id="one-tap-dial-btn-call" href="tel:1926" class="btn-primary" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem; font-size: 1rem; border-radius: 8px; text-decoration: none; font-weight: 800; background: var(--accent-emerald);">
+            <span>📞</span> <span>Call via Phone App</span>
+          </a>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button type="button" id="one-tap-dial-btn-copy" style="flex: 1; padding: 0.65rem; border: 1.5px solid var(--border-color); background: #ffffff; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+              📋 Copy Number
+            </button>
+            <button type="button" id="one-tap-dial-btn-siren" style="flex: 1; padding: 0.65rem; border: 1.5px solid #fca5a5; background: #fef2f2; color: #b91c1c; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+              🚨 Sound Siren
+            </button>
+          </div>
+
+          <button type="button" id="one-tap-dial-btn-close" style="padding: 0.6rem; border: none; background: transparent; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; text-decoration: underline;">
+            Dismiss / Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================================
+         MODULE B: STEALTH OFFICER & ADMIN TERMINAL (FULL DATA CRUD)
+         ======================================================= -->
+        <section id="officer-terminal-section" class="card officer-section" style="display: none;">
+      <!-- Privilege & Auth Banner -->
+      <div id="admin-auth-banner" class="officer-banner">
+        <span id="ui-terminal-banner-text">👑 CONFIDENTIAL FORESTRY ARCHIVE — UNREDACTED TELEMETRY & GPS COORDINATES</span>
+        <span id="ui-terminal-badge-auth">AUTH: GRANTED (CHIEF ADMINISTRATOR - FULL CRUD)</span>
+      </div>
+
+      <!-- Stat Metric Summary Cards (Section 9 Requirement) -->
+      <div class="stats-summary-grid" id="stats-summary-grid">
+        <div class="stat-summary-card">
+          <div class="stat-summary-icon">🐾</div>
+          <div class="stat-summary-info">
+            <div class="stat-summary-num" id="stat-total-records">0</div>
+            <div class="stat-summary-label">Total Wildlife Records</div>
+          </div>
+        </div>
+        <div class="stat-summary-card">
+          <div class="stat-summary-icon">🐘</div>
+          <div class="stat-summary-info">
+            <div class="stat-summary-num" id="stat-total-species">0</div>
+            <div class="stat-summary-label">Detected Species</div>
+          </div>
+        </div>
+        <div class="stat-summary-card" id="stat-card-users">
+          <div class="stat-summary-icon">👥</div>
+          <div class="stat-summary-info">
+            <div class="stat-summary-num" id="stat-total-users">0</div>
+            <div class="stat-summary-label">Registered Accounts</div>
+          </div>
+        </div>
+        <div class="stat-summary-card">
+          <div class="stat-summary-icon">⚠️</div>
+          <div class="stat-summary-info">
+            <div class="stat-summary-num" id="stat-active-hazards">0</div>
+            <div class="stat-summary-label">Active Highway Hazards</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Sub-Navigation Tabs (Visible only for ADMIN; Officers see Telemetry Console directly) -->
+      <div class="admin-subnav-bar" id="admin-subnav-bar">
+        <button type="button" id="tab-btn-telemetry" class="admin-subnav-btn active" onclick="switchAdminTab('telemetry')">
+          <span>📡</span> <span>Wildlife Telemetry Console</span>
+        </button>
+        <button type="button" id="tab-btn-users" class="admin-subnav-btn" onclick="switchAdminTab('users')">
+          <span>👥</span> <span>User & Role Administration</span>
+        </button>
+        <button type="button" id="tab-btn-audit" class="admin-subnav-btn" onclick="switchAdminTab('audit')">
+          <span>📜</span> <span>Security Audit Logs</span>
+        </button>
+      </div>
+
+      <!-- TAB PANEL 1: Wildlife Telemetry Console (Admin & Officer) -->
+      <div id="admin-panel-telemetry" class="admin-tab-content">
+        <div class="officer-actions-row">
+          <div>
+            <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);" id="ui-officer-title">
+              Forest Corridor Wildlife Telemetry Console
+            </h2>
+            <p style="font-size: 0.78rem; color: var(--text-muted);" id="ui-officer-sub">
+              Forensic Operational Mode: Exact unredacted GPS coordinates and live corridor telemetry.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <button type="button" id="btn-admin-add-sighting" class="btn-admin-add">
+              <span>➕</span>
+              <span id="ui-btn-add-record-text">Add Sighting Record</span>
+            </button>
+            <button type="button" id="btn-sim-ingest" class="btn-sim-ingest">
+              <span>⚡</span>
+              <span id="ui-btn-sim-text">Simulate Ingest</span>
+            </button>
+            <button type="button" id="btn-reset-demo" class="btn-reset-demo" title="Restore Default Seeds">
+              <span>🔄</span>
+              <span>Reset Records</span>
+            </button>
+            <button type="button" id="btn-lock-officer" class="btn-lock" onclick="handleLogout()">
+              🔒 Lock Terminal
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Forensic Log Table with Exact Coordinates, Incident Status & Actions -->
+        <div class="table-container">
+          <table class="forensic-table">
+            <thead>
+              <tr>
+                <th id="th-time">TIMESTAMP</th>
+                <th id="th-node">NODE ID</th>
+                <th id="th-model">ENGINE</th>
+                <th id="th-species">SPECIES</th>
+                <th id="th-conf">CONFIDENCE</th>
+                <th id="th-gps">EXACT GPS (LAT, LNG)</th>
+                <th id="th-speed">SPEED</th>
+                <th id="th-status">HAZARD</th>
+                <th id="th-incident">INCIDENT STATUS</th>
+                <th id="th-admin-actions" style="text-align: center;">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="telemetry-table-body">
+              <!-- Dynamically populated from backend -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB PANEL 2: User & Role Administration (Admin Only) -->
+      <div id="admin-panel-users" class="admin-tab-content" style="display: none;">
+        <div class="officer-actions-row">
+          <div>
+            <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">
+              👥 Platform User & Role Management
+            </h2>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">
+              Manage registered accounts, assign roles (ADMIN, OFFICER, USER), or activate/deactivate accounts.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button type="button" id="btn-open-provision-modal" class="btn-admin-add" onclick="openProvisionUserModal()">
+              <span>➕</span> <span>Provision New Account</span>
+            </button>
+            <button type="button" class="btn-sim-ingest" onclick="fetchAdminUsers()">
+              <span>🔄</span> <span>Refresh Users</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="forensic-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME & EMAIL</th>
+                <th>PROVIDER</th>
+                <th>ROLE ASSIGNMENT</th>
+                <th>ACCOUNT STATUS</th>
+                <th>CREATED</th>
+                <th style="text-align: center;">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-table-body">
+              <!-- Populated via GET /api/v1/admin/users -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB PANEL 3: Security Audit Logs (Admin Only) -->
+      <div id="admin-panel-audit" class="admin-tab-content" style="display: none;">
+        <div class="officer-actions-row">
+          <div>
+            <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">
+              📜 Immutable System Security & Activity Audit Trail
+            </h2>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">
+              Forensic audit records of wildlife telemetry creations, modifications, deletions, user promotions, and account activations.
+            </p>
+          </div>
+          <div>
+            <button type="button" class="btn-sim-ingest" onclick="fetchAuditLogs()">
+              <span>🔄</span> <span>Refresh Logs</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="forensic-table">
+            <thead>
+              <tr>
+                <th>LOG ID</th>
+                <th>TIMESTAMP (UTC)</th>
+                <th>ADMINISTRATOR</th>
+                <th>ACTION</th>
+                <th>RECORD ID</th>
+                <th>AUDIT DETAILS</th>
+              </tr>
+            </thead>
+            <tbody id="admin-audit-table-body">
+              <!-- Populated via GET /api/v1/admin/audit-logs -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       FOOTER & STEALTH TRIGGER
+       ========================================================= -->
+  <footer>
+    <div class="footer-left">
+      <span>WILDSHIELD EDGE TELEMETRY SYSTEM v2.5</span> • 
+      <span>Edge AI FOMO/YOLO Compatible</span>
+    </div>
+
+    <div class="footer-right">
+      <!-- Discreet Hidden Officer Trigger -->
+      <button type="button" id="btn-stealth-officer" class="btn-stealth-officer">
+        <span>🔒</span>
+        <span id="ui-stealth-btn-text">Officer Access</span>
+      </button>
+    </div>
+  </footer>
+  </div>
+
+
+  <!-- =========================================================
+       EMERGENCY CALL INITIATED MODAL (VOICE & MANUAL TRIGGER)
+       ========================================================= -->
+  <div id="emergency-call-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box emergency-modal-box">
+      <div class="emergency-beacon">🚨</div>
+      <h2 id="ui-emergency-modal-title" class="emergency-modal-title">EMERGENCY CALL INITIATED</h2>
+      <p id="ui-emergency-modal-desc" class="emergency-modal-desc">
+        Voice Supporter detected emergency distress command. Connecting your device to Forest Emergency Helpline...
+      </p>
+
+      <div class="emergency-countdown-card">
+        <div id="ui-emergency-countdown-label" class="countdown-label">
+          Auto-dialing Forest Toll-Free (1926) in:
+        </div>
+        <div id="emergency-countdown-number" class="countdown-number">3</div>
+        <div class="countdown-bar-wrap">
+          <div id="emergency-countdown-bar" class="countdown-bar"></div>
+        </div>
+      </div>
+
+      <div class="emergency-actions-col">
+        <a id="btn-dial-now-1926" href="tel:1926" class="btn-emergency-dial-now">
+          <span>📞</span>
+          <span id="ui-btn-dial-now">Call 1926 Now (Toll-Free)</span>
+        </a>
+
+        <a id="btn-dial-rrt" href="tel:+919447979000" class="btn-rrt-dial">
+          <span>🛡️</span>
+          <span id="ui-btn-dial-rrt">Call Rapid Response Squad (+91 94479 79000)</span>
+        </a>
+
+        <button type="button" id="btn-cancel-emergency-call" class="btn-cancel-call">
+          <span id="ui-btn-cancel-call">✖️ Cancel Emergency Call</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       PASSCODE AUTHENTICATION MODAL (DISCREET OFFICER ENTRY)
+       ========================================================= -->
+  <div id="passcode-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-title">
+        <span>🛡️</span>
+        <span id="ui-modal-title">Officer Verification</span>
+      </div>
+      <p id="ui-modal-desc" class="modal-desc">
+        Enter authorized Forest Division security passcode to unlock raw forensic telemetry and exact wildlife GPS coordinates.
+      </p>
+
+      <form id="passcode-form">
+        <input type="password" id="passcode-input" class="passcode-input" placeholder="••••••••" autocomplete="off" required />
+        <div id="modal-error" class="modal-error"></div>
+        <div class="modal-btn-row">
+          <button type="submit" class="btn-verify" id="ui-btn-verify">Verify Passcode</button>
+          <button type="button" id="btn-modal-cancel" class="btn-cancel" id="ui-btn-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       GOOGLE MAPS INTERACTIVE MODAL BOX ("SMALL BOX OF GOOGLE MAP")
+       ========================================================= -->
+  <div id="gmaps-box-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width: 720px; width: 95%; padding: 0; overflow: hidden; border: 2px solid var(--accent-emerald);">
+      <div style="background: var(--accent-emerald-dark); color: #ffffff; padding: 0.85rem 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 0.95rem;">
+          <span>🗺️</span>
+          <span id="ui-gmaps-modal-title">Google Maps Live Driving Navigation</span>
+        </div>
+        <button id="btn-close-gmaps-modal-box" type="button" style="background: rgba(255,255,255,0.2); border: none; color: #ffffff; font-size: 1.1rem; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-weight: bold;">✕</button>
+      </div>
+
+      <div style="background: #ecfdf5; padding: 0.55rem 1.1rem; border-bottom: 1px solid #a7f3d0; font-size: 0.8rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; color: #064e3b; font-weight: bold;">
+        <span id="ui-gmaps-modal-route-label">Wayanad NH-766 (Bandipur Checkpost → Sultan Bathery)</span>
+        <span id="ui-gmaps-modal-hazard-badge" style="background: #fee2e2; color: #dc2626; border: 1px solid #f87171; padding: 2px 8px; border-radius: 4px; font-family: monospace;">🚨 ELEPHANT ROADBLOCK AT KM 43</span>
+      </div>
+
+      <div style="width: 100%; height: 380px; background: #f1f5f9; position: relative;">
+        <iframe id="main-gmaps-iframe" style="width: 100%; height: 100%; border: none;" src="https://maps.google.com/maps?saddr=11.6660,76.6340&daddr=11.6645,76.2570&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+
+      <div style="background: #f8fafc; padding: 0.65rem 1.1rem; border-top: 1px solid var(--border-color); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; font-size: 0.8rem;">
+        <button id="btn-modal-box-copy" type="button" style="background: #e2e8f0; border: none; padding: 0.45rem 0.9rem; border-radius: 6px; font-weight: 700; cursor: pointer; color: #1e293b; display: inline-flex; align-items: center; gap: 0.4rem;">
+          <span>📋</span>
+          <span id="ui-modal-copy-label">Copy Route Link</span>
+        </button>
+        <a id="btn-modal-box-fullscreen" href="https://www.google.com/maps/dir/?api=1&origin=11.6660,76.6340&destination=11.6645,76.2570&travelmode=driving" target="_blank" rel="noopener noreferrer" style="background: var(--accent-emerald); color: #ffffff; padding: 0.45rem 1rem; border-radius: 6px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem;">
+          <span>🌐 Open Fullscreen Google Maps Tab</span>
+          <span>↗️</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       LOGIN & SIGN UP PORTAL (GOOGLE ACCOUNT & ADMIN ACCESS)
+       ========================================================= -->
+    <!-- =========================================================
+       IDENTITY, AUTHENTICATION & LOGIN MODAL (3 TABS)
+       ========================================================= -->
+  <div id="login-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width: 490px; width: 95%;">
+      <!-- Header -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem;">
+        <div>
+          <div class="modal-title" style="margin-bottom: 0.25rem;">
+            <span>🌿</span>
+            <span>WildShield Identity & Access</span>
+          </div>
+          <p class="modal-desc" style="margin-bottom: 0;">
+            Sign in with Google, staff credentials, or register as a traveler.
+          </p>
+        </div>
+        <button id="btn-close-login-modal" type="button" class="btn-modal-close" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">✕</button>
+      </div>
+
+      <!-- Auth Tabs -->
+      <div class="auth-tabs-row">
+        <button type="button" id="tab-btn-google" class="auth-tab-btn active" onclick="switchLoginTab('google')">
+          <span>Google SSO</span>
+        </button>
+        <button type="button" id="tab-btn-credentials" class="auth-tab-btn" onclick="switchLoginTab('credentials')">
+          <span>Sign In</span>
+        </button>
+        <button type="button" id="tab-btn-register" class="auth-tab-btn" onclick="switchLoginTab('register')">
+          <span>Traveler Sign Up</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: Google Account Sign-In / Sign-Up -->
+      <div id="auth-panel-google" class="auth-tab-panel">
+        <div style="text-align: center; margin: 1.2rem 0 1rem;">
+          <!-- Primary Google Auth Button -->
+          <button type="button" id="btn-google-sign-in" class="btn-google-auth">
+            <svg class="google-svg" viewBox="0 0 48 48" width="22" height="22">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+            <span id="google-auth-btn-label">Continue with Google</span>
+          </button>
+          
+          <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.6rem;">
+            Official OAuth 2.0 Identity Service • Role retrieved strictly from server DB
+          </div>
+        </div>
+
+        <!-- Google Profile Customizer (For Demo/Testing) -->
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 1rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.4rem; display: flex; align-items: center; justify-content: space-between;">
+            <span>Simulate Google Profile:</span>
+            <span style="font-size: 0.72rem; color: #059669; font-weight: 800;">SSO IDENTITY</span>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <input type="email" id="google-custom-email" value="admin.wildshield@gmail.com" placeholder="name@gmail.com" style="flex: 1; padding: 0.5rem 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.85rem;" />
+            <input type="text" id="google-custom-name" value="Chief Conservator" placeholder="Full Name" style="width: 130px; padding: 0.5rem 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.85rem;" />
+          </div>
+        </div>
+
+        <!-- 1-Click Fast Demonstration Admin Login -->
+        <div style="margin-top: 1rem;">
+          <button type="button" id="btn-quick-admin-login" class="btn-instant-admin" style="width: 100%;">
+            <span>⚡</span>
+            <span>Instant 1-Click Admin Access (Demonstration)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 2: Standard Sign In (Password / Passcode) -->
+      <div id="auth-panel-credentials" class="auth-tab-panel" style="display: none;">
+        <form id="standard-login-form" style="margin-top: 1rem;">
+          <div style="margin-bottom: 0.8rem;">
+            <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">
+              EMAIL OR USERNAME
+            </label>
+            <input type="text" id="login-email-input" value="admin@wildshield.gov.in" required style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.9rem;" />
+          </div>
+
+          <div style="margin-bottom: 0.8rem;">
+            <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">
+              PASSWORD OR SECURITY PASSCODE
+            </label>
+            <input type="password" id="login-password-input" value="admin2026" required style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.9rem; font-family: monospace;" />
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">
+              Default seeds: Admin (<code>admin2026</code>), Officer (<code>ranger2026</code>), Traveler (<code>traveler2026</code>)
+            </div>
+          </div>
+
+          <div id="login-form-error" class="modal-error" style="display: none; color: #dc2626; font-size: 0.82rem; margin-bottom: 0.75rem;"></div>
+
+          <div class="modal-btn-row">
+            <button type="submit" class="btn-verify" style="width: 100%; padding: 0.8rem; font-size: 0.95rem;">
+              Sign In to WildShield
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB 3: Traveler Registration (Sign Up) -->
+      <div id="auth-panel-register" class="auth-tab-panel" style="display: none;">
+        <form id="traveler-register-form" style="margin-top: 1rem;">
+          <div style="margin-bottom: 0.8rem;">
+            <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">
+              YOUR FULL NAME
+            </label>
+            <input type="text" id="reg-name-input" required placeholder="e.g. Rahul Sharma" style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.9rem;" />
+          </div>
+
+          <div style="margin-bottom: 0.8rem;">
+            <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">
+              EMAIL ADDRESS
+            </label>
+            <input type="email" id="reg-email-input" required placeholder="e.g. rahul@gmail.com" style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.9rem;" />
+          </div>
+
+          <div style="margin-bottom: 0.8rem;">
+            <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">
+              PASSWORD (MIN 6 CHARACTERS)
+            </label>
+            <input type="password" id="reg-password-input" required placeholder="Create secure password" style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.9rem;" />
+          </div>
+
+          <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 6px; padding: 0.55rem 0.8rem; font-size: 0.74rem; color: #065f46; margin-bottom: 0.85rem;">
+            🛡️ <strong>Public Registration Policy:</strong> All public registrations are granted Normal User (Traveler) role. Officer and Admin accounts can only be provisioned by System Administrators.
+          </div>
+
+          <div id="register-form-error" class="modal-error" style="display: none; color: #dc2626; font-size: 0.82rem; margin-bottom: 0.75rem;"></div>
+
+          <div class="modal-btn-row">
+            <button type="submit" class="btn-verify" style="width: 100%; padding: 0.8rem; font-size: 0.95rem;">
+              Create Traveler Account
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       ADMIN: PROVISION NEW OFFICER / ADMIN ACCOUNT MODAL
+       ========================================================= -->
+  <div id="admin-provision-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width: 480px; width: 95%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.6rem;">
+        <div class="modal-title" style="margin: 0;">
+          <span>➕</span> <span>Provision Staff Account</span>
+        </div>
+        <button type="button" class="btn-modal-close" onclick="closeProvisionUserModal()" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);">✕</button>
+      </div>
+
+      <form id="admin-provision-form">
+        <div style="margin-bottom: 0.85rem;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">FULL NAME</label>
+          <input type="text" id="prov-name" required placeholder="e.g. Forest Officer Anoop K." style="width: 100%; padding: 0.65rem 0.8rem; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.88rem;" />
+        </div>
+        <div style="margin-bottom: 0.85rem;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">OFFICIAL EMAIL ADDRESS</label>
+          <input type="email" id="prov-email" required placeholder="e.g. anoop@wildshield.gov.in" style="width: 100%; padding: 0.65rem 0.8rem; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.88rem;" />
+        </div>
+        <div style="margin-bottom: 0.85rem;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">ASSIGN ROLE</label>
+          <select id="prov-role" style="width: 100%; padding: 0.65rem 0.8rem; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.88rem; font-weight: 600;">
+            <option value="OFFICER">Forest Officer (Operational Telemetry & Incident Management)</option>
+            <option value="ADMIN">Chief Administrator (Full CRUD & User Management)</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 1.2rem;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.3rem;">INITIAL PASSWORD (MIN 6 CHARACTERS)</label>
+          <input type="password" id="prov-password" required placeholder="Set temporary password" style="width: 100%; padding: 0.65rem 0.8rem; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.88rem;" />
+        </div>
+        <div id="prov-error" class="modal-error" style="display: none; color: #dc2626; font-size: 0.82rem; margin-bottom: 0.75rem;"></div>
+        <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+          <button type="button" class="btn-cancel" onclick="closeProvisionUserModal()">Cancel</button>
+          <button type="submit" class="btn-verify">Provision Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="admin-add-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width: 540px; width: 95%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.6rem;">
+        <div class="modal-title" style="margin: 0;">
+          <span>➕</span>
+          <span>Create Wildlife Sighting Record</span>
+        </div>
+        <button id="btn-close-add-modal" type="button" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">✕</button>
+      </div>
+
+      <form id="admin-add-form">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+          <div>
+            <label class="form-label">SPECIES DETECTED</label>
+            <select id="add-species" class="form-input" required>
+              <option value="elephant">Elephant (Megaherbivore)</option>
+              <option value="tiger">Tiger (Apex Predator)</option>
+              <option value="leopard">Leopard (Carnivore)</option>
+              <option value="sloth bear">Sloth Bear</option>
+              <option value="deer">Spotted Deer (Herbivore)</option>
+              <option value="gaur">Gaur / Indian Bison</option>
+              <option value="wild boar">Wild Boar</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">HAZARD LEVEL</label>
+            <select id="add-hazard" class="form-input" required>
+              <option value="CRITICAL_BLOCK">CRITICAL_BLOCK (Roadway Obstructed)</option>
+              <option value="ADVISORY">ADVISORY (Roadside Shoulder Caution)</option>
+              <option value="CLEAR">CLEAR (Normal Highway Transit)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 0.75rem;">
+          <label class="form-label">HIGHWAY TRANSIT CORRIDOR / SECTOR</label>
+          <select id="add-sector" class="form-input" required>
+            <option value="KM 42-46 (Elephant Corridor)">Wayanad NH-766 • KM 42-46 (Elephant Corridor)</option>
+            <option value="KM 50-54 (Buffer Crossing Zone)">Wayanad NH-766 • KM 50-54 (Buffer Crossing Zone)</option>
+            <option value="KM 38-41 (River Valley Bend)">Wayanad NH-766 • KM 38-41 (River Valley Bend)</option>
+            <option value="KM 34-39 (Chinnar Sanctuary Ghat)">Chinnar SH-17 • KM 34-39 (Chinnar Sanctuary Ghat)</option>
+            <option value="KM 22-26 (Munnar Gap Ridge)">Munnar NH-85 • KM 22-26 (Munnar Gap Ridge)</option>
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+          <div>
+            <label class="form-label">EXACT LATITUDE</label>
+            <input type="number" step="0.0001" id="add-lat" class="form-input" value="11.6648" required />
+          </div>
+          <div>
+            <label class="form-label">EXACT LONGITUDE</label>
+            <input type="number" step="0.0001" id="add-lng" class="form-input" value="76.6215" required />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+          <div>
+            <label class="form-label">CONFIDENCE (0.50 - 1.0)</label>
+            <input type="number" step="0.01" min="0.5" max="1.0" id="add-conf" class="form-input" value="0.95" required />
+          </div>
+          <div>
+            <label class="form-label">SPEED (KM/H)</label>
+            <input type="number" step="0.5" id="add-speed" class="form-input" value="28.0" required />
+          </div>
+          <div>
+            <label class="form-label">MODEL ENGINE</label>
+            <select id="add-model" class="form-input">
+              <option value="FOMO">FOMO (Centroid)</option>
+              <option value="YOLO">YOLO (Box)</option>
+              <option value="MANUAL">MANUAL (Admin)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-btn-row">
+          <button type="submit" class="btn-verify" style="background: #059669;">
+            💾 Save & Publish Sighting
+          </button>
+          <button type="button" id="btn-cancel-add-modal" class="btn-cancel">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       ADMIN: EDIT / MODIFY TELEMETRY RECORD MODAL
+       ========================================================= -->
+  <div id="admin-edit-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width: 540px; width: 95%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.6rem;">
+        <div class="modal-title" style="margin: 0;">
+          <span>✏️</span>
+          <span>Edit Telemetry Record <span id="edit-record-id-badge" style="font-family: monospace; font-size: 0.85rem; color: #059669;">#1</span></span>
+        </div>
+        <button id="btn-close-edit-modal" type="button" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">✕</button>
+      </div>
+
+      <form id="admin-edit-form">
+        <input type="hidden" id="edit-record-id" />
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+          <div>
+            <label class="form-label">SPECIES</label>
+            <select id="edit-species" class="form-input" required>
+              <option value="elephant">Elephant</option>
+              <option value="tiger">Tiger</option>
+              <option value="leopard">Leopard</option>
+              <option value="sloth bear">Sloth Bear</option>
+              <option value="deer">Spotted Deer</option>
+              <option value="gaur">Gaur</option>
+              <option value="wild boar">Wild Boar</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">HAZARD LEVEL</label>
+            <select id="edit-hazard" class="form-input" required>
+              <option value="CRITICAL_BLOCK">CRITICAL_BLOCK</option>
+              <option value="ADVISORY">ADVISORY</option>
+              <option value="CLEAR">CLEAR</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 0.75rem;">
+          <label class="form-label">ROAD SECTOR</label>
+          <input type="text" id="edit-sector" class="form-input" required />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+          <div>
+            <label class="form-label">LATITUDE</label>
+            <input type="number" step="0.0001" id="edit-lat" class="form-input" required />
+          </div>
+          <div>
+            <label class="form-label">LONGITUDE</label>
+            <input type="number" step="0.0001" id="edit-lng" class="form-input" required />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+          <div>
+            <label class="form-label">CONFIDENCE (0.0 - 1.0)</label>
+            <input type="number" step="0.01" min="0.1" max="1.0" id="edit-conf" class="form-input" required />
+          </div>
+          <div>
+            <label class="form-label">SPEED (KM/H)</label>
+            <input type="number" step="0.5" id="edit-speed" class="form-input" required />
+          </div>
+        </div>
+
+        <div class="modal-btn-row">
+          <button type="submit" class="btn-verify" style="background: #059669;">
+            ✅ Save Changes
+          </button>
+          <button type="button" id="btn-cancel-edit-modal" class="btn-cancel">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       ADMIN: DELETE CONFIRMATION MODAL
+       ========================================================= -->
+  <div id="admin-delete-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width: 440px; width: 95%;">
+      <div class="modal-title" style="color: #dc2626;">
+        <span>🗑️</span>
+        <span>Delete Telemetry Record</span>
+      </div>
+      <p id="delete-modal-msg" class="modal-desc">
+        Are you sure you want to delete this telemetry observation? This action will immediately remove the record from the database and recalculate corridor safety.
+      </p>
+      <input type="hidden" id="delete-record-id" />
+      <div class="modal-btn-row">
+        <button type="button" id="btn-confirm-delete" class="btn-verify" style="background: #dc2626;">
+          Delete Permanently
+        </button>
+        <button type="button" id="btn-cancel-delete" class="btn-cancel">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Externalized Modular Client Application Engine -->
+  <script src="js/app.js"></script>
+</body>
+</html>
